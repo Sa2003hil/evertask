@@ -27,8 +27,7 @@ async function WelcomeMsg(){
 function WelcomeMsgFallback() {
   return (
     <div className="flex w-full">
-      <h1 className="text-4xl font-bold">
-        <Skeleton className="w-[170px] h-[36px]" />
+      <h1 className="text-4xl flex flex-col gap-3 font-bold">
         <Skeleton className="w-[170px] h-[36px]" />
         <Skeleton className="w-[170px] h-[36px]" />
       </h1>
