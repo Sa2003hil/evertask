@@ -11,10 +11,6 @@ import { CollectionColors } from '@/lib/constants';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
 
-
-
-
-
 interface Props {
     open: boolean;
     onOpenChnage: (open: boolean) => void;
@@ -95,7 +91,7 @@ const CreateCollectionSheet = ({ open, onOpenChnage }: Props) => {
                 </Form>
                 <div className='flex flex-col gap-3 mt-4'>
                     <Separator />
-                    <Button onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
+                    <Button variant="outline" className={cn(form.watch("color") && CollectionColors[form.getValues("color") as CollectionColors])} onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
                 </div>
             </SheetContent>
         </Sheet>
