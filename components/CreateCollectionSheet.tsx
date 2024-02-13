@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { CollectionColors } from '@/lib/constants';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
+import { on } from 'stream';
 
 interface Props {
     open: boolean;
@@ -26,9 +27,14 @@ const CreateCollectionSheet = ({ open, onOpenChnage }: Props) => {
     const onSubmit = (data: CreateCollectionSchemaType) => {
         console.log('Submitted', data);
     }
+    // Reset the Form status
+    const openChangeWrapper = (open: boolean) => {
+        form.reset();
+        onOpenChnage(open);
+    }
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChnage}>
+        <Sheet open={open} onOpenChange={openChangeWrapper}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>
