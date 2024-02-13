@@ -19,3 +19,4 @@ model Collection {
 
   @@unique([name, userId])
 }
+
