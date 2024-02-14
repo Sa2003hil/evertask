@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs";
 import React, { Suspense } from "react";
 import prisma from "@/lib/prisma";
 import CreateCollectionButton from "@/components/CreateCollectionButton";
+import CollectionCard from "@/components/CollectionCards";
 
 export default async function Home() {
   return (
@@ -49,7 +50,7 @@ function WelcomeMsgFallback() {
 
 async function CollectionList() {
   const user = await currentUser();
-  const collections = await prisma?.collection.findMany({
+  const collections = await prisma.collection.findMany({
     where: {
       userId: user?.id
     }
@@ -68,5 +69,19 @@ async function CollectionList() {
 
     )
   }
+
+  return (
+    <div>
+      {/* Collection {collections.length} */}
+      <CreateCollectionButton />
+      <div className="flex flex-col gap-4 mt-6">
+        {
+          collections.map(collection => (
+            <CollectionCard key={collection.id} collection={collection} />
+          ))
+        }
+      </div>
+    </div>
+  )
 }
 

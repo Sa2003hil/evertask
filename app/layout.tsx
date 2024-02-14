@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import React from "react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,23 +24,24 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en" className={cn(inter.className,"dark")} style={{
-      colorScheme:"dark"
-    }}>
-      <body >
+      <html lang="en" className={cn(inter.className, "dark")} style={{
+        colorScheme: "dark"
+      }}>
+        <body >
 
-      <ThemeProvider>
-        <div className="flex min-h-screen w-full flex-col items-center dark:bg-black">
-        <Navbar />
-         <Separator/>
-        <main className="flex flex-grow w-full justify-center items-center dark:bg-neutral-950">
-        {children}
-        </main>
-        </div>
-      </ThemeProvider>
+          <ThemeProvider>
+            <div className="flex min-h-screen w-full flex-col items-center dark:bg-black">
+              <Navbar />
+              <Separator />
+              <main className="flex flex-grow w-full justify-center items-center dark:bg-neutral-950">
+                {children}
+                <Toaster />
+              </main>
+            </div>
+          </ThemeProvider>
 
-      </body>
-    </html>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
