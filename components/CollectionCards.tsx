@@ -7,10 +7,16 @@ import { Collapsible, CollapsibleTrigger } from './ui/collapsible';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { CollectionColors } from '@/lib/constants';
-import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
+import { CaretDownIcon, CaretUpIcon, TrashIcon } from '@radix-ui/react-icons';
 import { CollapsibleContent } from '@radix-ui/react-collapsible';
 import { Progress } from './ui/progress';
 import { Separator } from './ui/separator';
+import PlusIcon from './icons/PlusIcon';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger, AlertDialogDescription } from './ui/alert-dialog';
+import { deleteCollection } from '@/actions/collection';
+import { toast } from './ui/use-toast';
+import { useRouter } from 'next/navigation';
+
 
 interface Props {
     collection: Collection;
@@ -22,6 +28,25 @@ function CollectionCards({ collection }: Props) {
         "Task 1",
         "Task 2",
     ];
+
+    const router = useRouter();
+
+    const removeCollection = async () => {
+        try {
+            await deleteCollection(collection.id);
+            toast({
+                title: "Success",
+                description: "Collection Deleted Successfully",
+            })
+            router.refresh();
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to delete collection",
+                variant: "destructive"
+            })
+        }
+    }
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleTrigger asChild>
@@ -60,6 +85,39 @@ function CollectionCards({ collection }: Props) {
                 <Separator />
                 <footer className='h-[40px] px-4 p-[2px] text-xs text-neutral-500  flex justify-between items-center'>
                     <p>Created at {collection.createdAt.toDateString()}</p>
+                    <div>
+                        <Button size={"icon"} variant={"ghost"}>
+                            <PlusIcon />
+                        </Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size={"icon"} variant={"ghost"}>
+                                    <TrashIcon />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                {/* Hello */}
+                                <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    The action cannnot be undone. This will permanently delete the collection and all of its tasks.
+                                </AlertDialogDescription>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={() => {
+                                            removeCollection();
+                                        }}
+
+                                    >
+                                        Proceed
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+
+                    </div>
                 </footer>
             </CollapsibleContent>
         </Collapsible>
