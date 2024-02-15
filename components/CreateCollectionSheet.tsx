@@ -1,17 +1,17 @@
-import React from 'react'
+import React from "react";
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
-    SheetTitle
-} from './ui/sheet'
-import { useForm } from 'react-hook-form'
+    SheetTitle,
+} from "./ui/sheet";
+import { useForm } from "react-hook-form";
 import {
     createCollectionSchema,
-    CreateCollectionSchemaType
-} from '@/schema/createCollection'
-import { zodResolver } from '@hookform/resolvers/zod'
+    CreateCollectionSchemaType,
+} from "@/schema/createCollection";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Form,
     FormControl,
@@ -19,76 +19,71 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage
-} from './ui/form'
-import { Input } from './ui/input'
+    FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue
-} from './ui/select'
-import { cn } from '@/lib/utils'
-import { CollectionColors } from '@/lib/constants'
-import { Separator } from './ui/separator'
-import { Button } from './ui/button'
-import { on } from 'stream'
-import { createCollection } from '@/actions/collection'
-import { toast } from './ui/use-toast'
-import { ReloadIcon } from '@radix-ui/react-icons'
-import { useRouter } from 'next/navigation'
+    SelectValue,
+} from "./ui/select";
+import { CollectionColor, CollectionColors } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
+import { createCollection } from "@/actions/collection";
+import { toast } from "./ui/use-toast";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 interface Props {
-    open: boolean
-    onOpenChnage: (open: boolean) => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
-const CreateCollectionSheet = ({ open, onOpenChnage }: Props) => {
+function CreateCollectionSheet({ open, onOpenChange }: Props) {
+    const form = useForm<CreateCollectionSchemaType>({
+        resolver: zodResolver(createCollectionSchema),
+        defaultValues: {},
+    });
 
     const router = useRouter();
 
-    const form = useForm<CreateCollectionSchemaType>({
-        resolver: zodResolver(createCollectionSchema),
-        defaultValues: {}
-    })
-
     const onSubmit = async (data: CreateCollectionSchemaType) => {
         try {
-            await createCollection(data)
+            await createCollection(data);
+
             // Close the sheet
-            openChangeWrapper(false)
+            openChangeWrapper(false);
             router.refresh();
 
-            // show toast
             toast({
-                title: 'Success',
-                description: 'Collection created successfully'
-            })
-        } catch (error: any) {
-            // show toast
+                title: "Success",
+                description: "Collection created successfully!",
+            });
+        } catch (e: any) {
+            // Show toast
             toast({
-                title: 'Error',
-                description: error.message,
-                variant: 'destructive'
-            })
-
-            console.log('error ', error)
+                title: "Error",
+                description: "Something went wrong. Please try again later",
+                variant: "destructive",
+            });
+            console.log("Error while creating collection", e);
         }
-    }
-    // Reset the Form status
+    };
+
     const openChangeWrapper = (open: boolean) => {
-        form.reset()
-        onOpenChnage(open)
-    }
-
-
+        form.reset();
+        onOpenChange(open);
+    };
 
     return (
         <Sheet open={open} onOpenChange={openChangeWrapper}>
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Add new collections</SheetTitle>
+                    <SheetTitle>Add new collection</SheetTitle>
                     <SheetDescription>
                         Collections are a way to group your tasks
                     </SheetDescription>
@@ -96,49 +91,50 @@ const CreateCollectionSheet = ({ open, onOpenChnage }: Props) => {
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-4 flex flex-col '
+                        className="space-y-4 flex flex-col"
                     >
                         <FormField
                             control={form.control}
-                            name='name'
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder='Personal' {...field} />
+                                        <Input placeholder="Personal" {...field} />
                                     </FormControl>
                                     <FormDescription>Collection name</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
                         <FormField
                             control={form.control}
-                            name='color'
+                            name="color"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Color</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={color => field.onChange(color)}>
+                                        <Select onValueChange={(color) => field.onChange(color)}>
                                             <SelectTrigger
                                                 className={cn(
-                                                    'w-full h-8 text-white',
-                                                    CollectionColors[field.value as CollectionColors]
+                                                    "w-full h-8 text-white",
+                                                    CollectionColors[field.value as CollectionColor]
                                                 )}
                                             >
                                                 <SelectValue
-                                                    placeholder='color'
-                                                    className='w-full h-8'
+                                                    placeholder="Color"
+                                                    className="w-full h-8"
                                                 />
                                             </SelectTrigger>
-                                            <SelectContent className='w-full'>
-                                                {Object.keys(CollectionColors).map(color => (
+                                            <SelectContent className="w-full">
+                                                {Object.keys(CollectionColors).map((color) => (
                                                     <SelectItem
                                                         key={color}
                                                         value={color}
                                                         className={cn(
-                                                            `w-full h-8 rounded-md my-1 text-white focous:text-white focus:font-bold focus:ring-2 focus:ring-inset dark:focus:ring-white focus:px-8`,
-                                                            CollectionColors[color as CollectionColors]
+                                                            `w-full h-8 rounded-md my-1 text-white focus:text-white focus:font-bold focus:ring-2 ring-neutral-600 focus:ring-inset dark:focus:ring-white focus:px-8`,
+                                                            CollectionColors[color as CollectionColor]
                                                         )}
                                                     >
                                                         {color}
@@ -156,27 +152,26 @@ const CreateCollectionSheet = ({ open, onOpenChnage }: Props) => {
                         />
                     </form>
                 </Form>
-                <div className='flex flex-col gap-3 mt-4'>
+                <div className="flex flex-col gap-3 mt-4">
                     <Separator />
                     <Button
                         disabled={form.formState.isSubmitting}
-                        variant='outline'
+                        variant={"outline"}
                         className={cn(
-                            form.watch('color') &&
-                            CollectionColors[form.getValues('color') as CollectionColors]
+                            form.watch("color") &&
+                            CollectionColors[form.getValues("color") as CollectionColor]
                         )}
                         onClick={form.handleSubmit(onSubmit)}
                     >
                         Confirm
-                        {/* adding spinner */}
                         {form.formState.isSubmitting && (
-                            <ReloadIcon className='ml-2 h-4 w-4 animate-spin' />
+                            <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
                         )}
                     </Button>
                 </div>
             </SheetContent>
         </Sheet>
-    )
+    );
 }
 
-export default CreateCollectionSheet
+export default CreateCollectionSheet;

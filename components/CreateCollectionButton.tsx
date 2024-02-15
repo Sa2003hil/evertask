@@ -15,7 +15,7 @@ function CreateCollectionButton() {
           Create Collection
         </span>
       </Button>
-      <CreateCollectionSheet open={open} onOpenChnage={handleOpenChange} />
+      <CreateCollectionSheet open={open} onOpenChange={handleOpenChange} />
     </div>
   )
 }
