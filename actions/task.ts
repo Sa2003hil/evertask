@@ -1,7 +1,7 @@
 "use server";
 
-import  prisma  from "@/lib/prisma";
-import { createTaskSchemaType } from "@/schema/createTasks";
+import { prisma } from "@/lib/prisma";
+import { createTaskSchemaType } from "@/schema/createTask";
 import { currentUser } from "@clerk/nextjs";
 
 export async function createTask(data: createTaskSchemaType){
