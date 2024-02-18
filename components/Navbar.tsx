@@ -3,7 +3,7 @@ import React from "react";
 import Logo from "./Logo";
 import ThemeSwitcher from "./ThemeSwitcher";
 
-function NavBar() {
+function Navbar() {
   return (
     <nav className="flex w-full items-center justify-between p-4 px-8 h-[60px]">
       <Logo />
@@ -15,4 +15,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default Navbar;
