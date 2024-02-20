@@ -11,8 +11,10 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RemindMe",
-  description: "Created by: @CodeWithKliton",
+  title: "EverTask",
+  description: "Created by: @CodeWithSahil",
+  icons: ['../public/Evertask_logo-removebg-preview.ico']
+
 };
 
 export default function RootLayout({
